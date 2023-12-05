@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `Store` MODIFY `userId` VARCHAR(191) NOT NULL;

@@ -31,9 +31,18 @@ export default function StoreModal() {
   });
 
   const onSubmit = async (values: z.infer<typeof modalFormSchema>) => {
-    console.log(values);
-
     //TODO Create Store
+    const res = await fetch("/api/stores", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(values),
+    });
+
+    if (res.status == 200) {
+      console.log(await res.json());
+    }
   };
 
   return (
