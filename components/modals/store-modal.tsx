@@ -15,6 +15,9 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
+import toast from "react-hot-toast";
+import { useState } from "react";
+import axios from "axios";
 
 const modalFormSchema = z.object({
   name: z.string().min(1),
@@ -22,6 +25,7 @@ const modalFormSchema = z.object({
 
 export default function StoreModal() {
   const storeModal = useStoreModal();
+  const [loading, setLoading] = useState(false);
 
   const form = useForm<z.infer<typeof modalFormSchema>>({
     defaultValues: {
@@ -31,17 +35,16 @@ export default function StoreModal() {
   });
 
   const onSubmit = async (values: z.infer<typeof modalFormSchema>) => {
-    //TODO Create Store
-    const res = await fetch("/api/stores", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(values),
-    });
+    try {
+      setLoading(true);
 
-    if (res.status == 200) {
-      console.log(await res.json());
+      const res = await axios.post("/api/stores", values);
+
+      window.location.assign(`/${res.data.id}`);
+    } catch (error) {
+      toast.error("Something Went Wrong");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -62,7 +65,11 @@ export default function StoreModal() {
                 <FormItem>
                   <FormLabel>Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="E-Commerce" {...field} />
+                    <Input
+                      placeholder="E-Commerce"
+                      {...field}
+                      disabled={loading}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -71,6 +78,7 @@ export default function StoreModal() {
             <div className="pt-6 flex space-x-2 items-center justify-end w-full">
               <Button
                 variant="outline"
+                disabled={loading}
                 onClick={(e) => {
                   e.preventDefault();
                   storeModal.onClose();
@@ -78,7 +86,9 @@ export default function StoreModal() {
               >
                 Cancel
               </Button>
-              <Button type="submit">Continue</Button>
+              <Button type="submit" disabled={loading}>
+                Continue
+              </Button>
             </div>
           </form>
         </Form>

@@ -1,21 +1,27 @@
-import prisma from "@/lib/prismadb";
+import prismadb from "@/lib/prismadb";
 import { auth } from "@clerk/nextjs";
+import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
   try {
-    const { name } = await request.json();
-
     const { userId } = auth();
 
     if (!userId) {
-      return Response.json({ error: "UnAuthorized" }, { status: 401 });
+      return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    const result = await prisma.store.create({ data: { name, userId } });
+    const { name } = await request.json();
 
-    return Response.json(result, { status: 200 });
+    if (!name) {
+      return new NextResponse("Name required", { status: 400 });
+    }
+
+    const newStore = await prismadb.store.create({ data: { name, userId } });
+
+    return NextResponse.json(newStore);
   } catch (error) {
-    console.log("[POST_STORE]", error);
-    return Response.json({ error: "Internal Server Error" }, { status: 500 });
+    console.log("[POST_STORES]", error);
+
+    return new NextResponse("Internal Error", { status: 500 });
   }
 }
