@@ -19,5 +19,5 @@ export default async function SetupLayout({
     redirect(`/${store.id}`);
   }
 
-  return <div className="p-4">{children}</div>;
+  return <>{children}</>;
 }
