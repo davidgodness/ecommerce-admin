@@ -8,7 +8,7 @@ datasource db {
 }
 
 model Store {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(uuid())
   userId    String
   name      String
   createdAt DateTime @default(now())
