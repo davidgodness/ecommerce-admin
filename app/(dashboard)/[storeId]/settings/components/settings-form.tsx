@@ -64,13 +64,10 @@ export default function SettingsForm({ initialData }: { initialData: Store }) {
   const onConfirm = async () => {
     try {
       setLoading(true);
-      const res = await axios.delete(`/api/stores/${params.storeId}`);
-
-      if (res.status == 200) {
-        toast.success("Store deleted");
-        router.refresh();
-        router.push("/");
-      }
+      await axios.delete(`/api/stores/${params.storeId}`);
+      toast.success("Store deleted");
+      router.push("/");
+      router.refresh();
     } catch (error) {
       toast.error("Make sure you removed all products and catagories first.");
     } finally {
