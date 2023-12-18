@@ -16,7 +16,7 @@ export default function ApiList({ entityName, entityIdName }: ApiListProps) {
   const base = `${origin}/api/${params.storeId}`;
 
   return (
-    <div>
+    <>
       <ApiAlert
         title="GET"
         description={`${base}/${entityName}`}
@@ -42,6 +42,6 @@ export default function ApiList({ entityName, entityIdName }: ApiListProps) {
         description={`${base}/${entityName}/{${entityIdName}}`}
         variant="admin"
       />
-    </div>
+    </>
   );
 }
