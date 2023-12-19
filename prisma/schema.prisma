@@ -18,6 +18,7 @@ model Store {
   products   Product[]
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
+  orders     Order[]
 }
 
 model Billboard {
@@ -80,8 +81,21 @@ model Product {
   storeId    String
   store      Store    @relation(fields: [storeId], references: [id])
   images     Image[]
+  orders     Order[]
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
+}
+
+model Order {
+  id        String    @id @default(uuid())
+  products  Product[]
+  storeId   String
+  store     Store     @relation(fields: [storeId], references: [id])
+  isPaid    Boolean   @default(false)
+  phone     String
+  address   String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 }
 
 model Image {
