@@ -172,7 +172,7 @@ export default function CategoryForm({
                     </FormControl>
                     <SelectContent>
                       {billboards.map((billboard) => (
-                        <SelectItem value={billboard.id}>
+                        <SelectItem value={billboard.id} key={billboard.id}>
                           {billboard.label}
                         </SelectItem>
                       ))}
